@@ -1,19 +1,19 @@
-node {
-    def customImage = 'node:16-buster-slim'
-
-    // Definisikan agent (agen) dalam blok node
-    docker.image(customImage).withRun('-p 3000:3000') {
-        // Tahap 'Build'
+pipeline {
+    agent {
+        docker {
+            image 'node:16-buster-slim'
+            args '-p 3000:3000'
+        }
+    }
+    stages {
         stage('Build') {
             steps {
                 sh 'npm install'
             }
         }
-
-        // Tahap 'Test'
-        stage('Test') {
+        stage('Test') { 
             steps {
-                sh './jenkins/scripts/test.sh'
+                sh './jenkins/scripts/test.sh' 
             }
         }
     }
