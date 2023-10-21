@@ -11,9 +11,24 @@ pipeline {
                 sh 'npm install'
             }
         }
-        stage('Test') { 
+        stage('Test') {
             steps {
-                sh './jenkins/scripts/test.sh' 
+                sh './jenkins/scripts/test.sh'
+            }
+        }
+        stage('Manual Approval') {
+            steps {
+                input message: 'Lanjutkan ke tahap Deploy?'
+            }
+        }
+        stage('Deploy') {
+            steps {
+                sh './jenkins/scripts/deliver.sh'
+                script {
+                    // Tunggu selama 1 menit
+                    sleep time: 60, unit: 'SECONDS'
+                }
+                sh './jenkins/scripts/kill.sh'
             }
         }
     }
